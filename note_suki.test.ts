@@ -11,6 +11,9 @@ test('CLI behavior with mocked network only', async (t) => {
     return new Response('{}', { status: 201, headers: { 'Set-Cookie': 'test=value' } });
   });
   const article = 'n851fc060c31a';
+  assert.equal(await main([]), 0);
+  assert.equal(await main(['--help']), 0);
+  assert.equal(await main(['-h']), 0);
   assert.equal(await main([article, '--count', '3', '--dry-run']), 0);
   assert.equal(network.mock.callCount(), 0);
   assert.equal(await main(['https://note.com/trail_story/n/' + article, '--count', '2', '--interval', '1']), 0);

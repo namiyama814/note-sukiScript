@@ -1,6 +1,19 @@
+#!/usr/bin/env node
 /** Anonymous-like API research artifact. Read README.md before use. */
 import { parseArgs } from 'node:util';
 import { setTimeout as sleep } from 'node:timers/promises';
+
+const HELP = `Usage: note-suki <article> --count <integer> [options]
+
+Arguments
+  article               note.com article URL or article key
+
+Options
+  --count <integer>     POST requests (required)
+  --interval <seconds>  Delay between requests (default 2)
+  --timeout <seconds>   Request timeout (default 15)
+  --dry-run             Print request plan without sending
+  -h, --help            Show help`;
 
 function noteKey(value: string | undefined): string {
   if (value && /^n[0-9a-f]{12}$/.test(value)) return value;
@@ -36,8 +49,8 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<numb
         help: { type: 'boolean', short: 'h' },
       },
     });
-    if (values.help) {
-      console.log('note_suki.ts <article> --count <integer> [--interval <seconds>] [--timeout <seconds>] [--dry-run]');
+    if (values.help || argv.length === 0) {
+      console.log(HELP);
       return 0;
     }
     if (positionals.length !== 1) throw new Error('exactly one article is required');
@@ -55,6 +68,7 @@ export async function main(argv: string[] = process.argv.slice(2)): Promise<numb
     };
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
+    console.error('Run note-suki --help for usage.');
     return 2;
   }
 

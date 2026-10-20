@@ -1,11 +1,19 @@
 {
   "name": "note-suki-script",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "note-suki": "dist/note_suki.js"
+  },
+  "files": ["dist/note_suki.js", "README.md", "LICENSE"],
   "engines": {
     "node": ">=24"
   },
   "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "prepare": "npm run build",
+    "start": "node dist/note_suki.js",
     "typecheck": "tsc --noEmit",
     "test": "node --test note_suki.test.ts"
   },

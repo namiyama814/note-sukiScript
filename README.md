@@ -4,6 +4,18 @@
 
 **本コードは、いかなる理由であっても利用・実行してはならず、本コードを用いた検証も行ってはなりません。検証目的という記載は、利用や検証を許可するものではありません。**
 
+## CLIの構成
+
+コマンド名は `note-suki` です。`package.json` の `bin` に、ビルドで生成する `dist/note_suki.js` を登録しています。Node.js 24以降が必要です。実行時の追加パッケージは不要です。
+
+ローカルのインストール設定は `npm install` と `npm link` に対応しています。`npm install` の `prepare` 処理でTypeScriptをJavaScriptに変換します。これはCLIの構成を示す記載であり、上記の利用・実行・検証の禁止を解除するものではありません。
+
+```text
+note-suki <article> --count <integer> [--interval <seconds>] [--timeout <seconds>] [--dry-run]
+```
+
+引数なし、または `-h` / `--help` でヘルプを表示します。`npm start -- <引数>` も同じCLIを呼び出す設定です。
+
 ## スクリプトの仕様
 
 `note_suki.ts` はTypeScriptで記述し、Node.js 24以降の組み込み機能のみで動作します。記事URLまたは記事キーと送信回数を受け取り、次のAPIへ空のPOSTリクエストを順に送る実装です。
@@ -15,7 +27,7 @@ POST https://note.com/api/v3/notes/{記事キー}/anonymous_likes
 | 引数 | 仕様 |
 | --- | --- |
 | `article` | `https://note.com/{投稿者}/n/{記事キー}` または記事キー |
-| `--count` | 送信回数。1以上の整数、指定必須 |
+| `--count` | 送信回数。1〜9007199254740991の整数、指定必須 |
 | `--interval` | 送信間隔（秒）。既定値2、最小1、最大2147483.647 |
 | `--timeout` | リクエストのタイムアウト（秒）。既定値15、最小1、最大2147483.647 |
 | `--dry-run` | 外部通信を行わず、送信予定を表示 |
